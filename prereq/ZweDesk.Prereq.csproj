@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Carrier assembly for the WebView2 Runtime installers. It contains no code: the installers downloaded by build.ps1
+    into prereq\cache\ are embedded as resources so the published ZweDesk.exe is one self-sufficient file even on a
+    Windows Server without the runtime. The assembly is loaded lazily (only when the runtime is missing), so the
+    ~200 MB payload costs nothing at normal start-up. Build with -p:EmbedRuntimeInstaller=false for a small exe.
+  -->
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <AssemblyName>ZweDesk.Prereq</AssemblyName>
+    <RootNamespace>ZweDesk.Prereq</RootNamespace>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <EmbedRuntimeInstaller Condition="'$(EmbedRuntimeInstaller)' == ''">true</EmbedRuntimeInstaller>
+    <PrereqCache>$(MSBuildThisFileDirectory)cache\</PrereqCache>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(EmbedRuntimeInstaller)' == 'true'">
+    <EmbeddedResource Include="$(PrereqCache)MicrosoftEdgeWebView2RuntimeInstallerX64.exe"
+                      LogicalName="prereq/MicrosoftEdgeWebView2RuntimeInstallerX64.exe"
+                      Condition="Exists('$(PrereqCache)MicrosoftEdgeWebView2RuntimeInstallerX64.exe')" />
+    <EmbeddedResource Include="$(PrereqCache)MicrosoftEdgeWebview2Setup.exe"
+                      LogicalName="prereq/MicrosoftEdgeWebview2Setup.exe"
+                      Condition="Exists('$(PrereqCache)MicrosoftEdgeWebview2Setup.exe')" />
+  </ItemGroup>
+
+</Project>

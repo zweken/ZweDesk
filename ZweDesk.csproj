@@ -1,0 +1,54 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <RootNamespace>ZweDesk</RootNamespace>
+    <AssemblyName>ZweDesk</AssemblyName>
+    <Version>1.0.2</Version>
+    <Product>ZweDesk</Product>
+    <Company>Zweken</Company>
+    <Authors>Zweken</Authors>
+    <Copyright>Copyright © 2026 Zweken</Copyright>
+    <Description>Provisioning and housekeeping for VDI user estates on Windows domains: AD account, groups, home folder, FSRM quota, DFS link, Horizon entitlement.</Description>
+    <RepositoryUrl>https://github.com/zweken/ZweDesk</RepositoryUrl>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <ApplicationIcon>assets\z-76x76.ico</ApplicationIcon>
+    <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
+    <ApplicationUseCompatibleTextRendering>false</ApplicationUseCompatibleTextRendering>
+    <ApplicationVisualStyles>true</ApplicationVisualStyles>
+
+    <!-- single-file, self-contained deliverable (see build.ps1) -->
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <SelfContained>true</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <DebugType>embedded</DebugType>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <NoWarn>$(NoWarn);CA1416;MSB3277</NoWarn>
+    <DefaultItemExcludes>$(DefaultItemExcludes);prereq\**;dist\**</DefaultItemExcludes>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3179.45" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.12" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- carries the WebView2 Runtime installers; loaded only when the runtime is missing -->
+    <ProjectReference Include="prereq\ZweDesk.Prereq.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="ui\**\*" LogicalName="ui/%(RecursiveDir)%(Filename)%(Extension)" />
+    <EmbeddedResource Include="fixtures\userdata_listing.txt" LogicalName="fixtures/userdata_listing.txt" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,29 @@
+# .NET build output
+bin/
+obj/
+prereq/bin/
+prereq/obj/
+
+# Published deliverable (built by build.ps1, attached to GitHub Releases — never committed)
+dist/
+
+# WebView2 Runtime installers downloaded by build.ps1 (~200 MB; re-downloaded when missing)
+prereq/cache/
+
+# IDE / editor / tooling state
+.vs/
+.vscode/
+.idea/
+.claude/
+*.user
+*.suo
+*.swp
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Local data that must never enter the repository
+*.db
+*.log
+selftest.txt

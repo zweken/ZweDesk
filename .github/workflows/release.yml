@@ -1,0 +1,51 @@
+name: release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Build lite (no embedded WebView2 Runtime)
+        shell: pwsh
+        run: |
+          .\build.ps1 -NoEmbeddedRuntime -NoSdkInstall
+          New-Item -ItemType Directory -Force -Path release | Out-Null
+          Copy-Item dist\ZweDesk.exe release\ZweDesk-lite.exe
+
+      - name: Build full (embedded, Authenticode-verified WebView2 Runtime installers)
+        shell: pwsh
+        run: |
+          .\build.ps1 -NoSdkInstall
+          Copy-Item dist\ZweDesk.exe release\ZweDesk.exe
+
+      - name: Self-test
+        shell: pwsh
+        run: |
+          .\release\ZweDesk.exe --selftest
+          if ($LASTEXITCODE -ne 0) { throw "self-test failed" }
+
+      - name: Checksums
+        shell: pwsh
+        run: |
+          Get-ChildItem release\*.exe | ForEach-Object { "{0}  {1}" -f (Get-FileHash $_ -Algorithm SHA256).Hash.ToLower(), $_.Name } | Set-Content release\SHA256SUMS.txt
+          Get-Content release\SHA256SUMS.txt
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            release/ZweDesk.exe
+            release/ZweDesk-lite.exe
+            release/SHA256SUMS.txt
+          generate_release_notes: true

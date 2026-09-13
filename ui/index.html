@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ZweDesk</title>
+<link rel="icon" type="image/png" href="logo.png">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+
+<!-- ============================================================ window chrome (replaces the native title bar) -->
+<header id="chrome" class="chrome">
+  <div id="chromeDrag" class="chrome-drag">
+    <img class="chrome-logo" src="logo.png" alt="">
+    <span class="chrome-name">ZweDesk</span>
+    <span id="chromeSub" class="chrome-sub"></span>
+  </div>
+  <div id="chromeBtns" class="chrome-btns hidden">
+    <button id="wMin" type="button" title="Minimize" aria-label="Minimize"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M0 5h10" stroke="currentColor" stroke-width="1"/></svg></button>
+    <button id="wClose" type="button" class="close" title="Close" aria-label="Close"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1l-8 8" stroke="currentColor" stroke-width="1.1"/></svg></button>
+  </div>
+</header>
+
+<!-- ============================================================ login -->
+<div id="login" class="login hidden">
+  <div class="login-card">
+    <div class="brand">
+      <img class="brand-mark" src="logo.png" alt="">
+      <div>
+        <div class="brand-name">ZweDesk</div>
+        <div class="brand-sub">Users · desktops · folders · quotas · DFS</div>
+      </div>
+    </div>
+    <form id="loginForm" autocomplete="off">
+      <label class="field">
+        <span>Domain</span>
+        <select id="loginDomain"></select>
+      </label>
+      <label class="field">
+        <span>User name</span>
+        <input id="loginUser" type="text" placeholder="administrator" spellcheck="false">
+      </label>
+      <label class="field">
+        <span>Password</span>
+        <input id="loginPass" type="password" placeholder="••••••••">
+      </label>
+      <label class="check"><input id="loginRemember" type="checkbox"> <span>Remember on this computer (DPAPI, this Windows account only)</span></label>
+      <div id="loginError" class="form-error hidden"></div>
+      <button id="loginBtn" class="btn primary wide" type="submit">Sign in</button>
+    </form>
+    <div id="loginFirstRun" class="first-run hidden">
+      <p>No domain is configured yet.</p>
+      <button id="loginAddDomain" class="btn">Add a domain</button>
+    </div>
+    <div class="login-foot">
+      <span id="loginMode" class="badge muted">…</span>
+      <span id="loginMachine" class="muted small"></span>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ app shell -->
+<div id="app" class="app hidden">
+  <aside class="sidebar">
+    <div class="brand compact">
+      <img class="brand-mark" src="logo.png" alt="">
+      <div>
+        <div class="brand-name">ZweDesk</div>
+        <div id="sideDomain" class="brand-sub"></div>
+      </div>
+    </div>
+    <nav id="nav" class="nav"></nav>
+    <div class="sidebar-foot">
+      <div id="sideUser" class="side-user"></div>
+      <div class="row gap">
+        <button id="themeBtn" class="btn ghost small" title="Toggle theme">Theme</button>
+        <button id="logoutBtn" class="btn ghost small">Sign out</button>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div>
+        <h1 id="pageTitle"></h1>
+        <div id="pageSub" class="muted small"></div>
+      </div>
+      <div id="topActions" class="row gap"></div>
+    </header>
+    <div id="statusStrip" class="status-strip hidden"></div>
+    <section id="content" class="content"></section>
+  </main>
+</div>
+
+<div id="drawerBackdrop" class="drawer-backdrop hidden"></div>
+<aside id="drawer" class="drawer hidden"></aside>
+<div id="modalHost"></div>
+<div id="toasts" class="toasts"></div>
+
+<script src="app.js"></script>
+<script src="wizard.js"></script>
+</body>
+</html>
