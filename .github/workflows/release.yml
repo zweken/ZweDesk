@@ -33,8 +33,9 @@ jobs:
       - name: Self-test
         shell: pwsh
         run: |
-          .\release\ZweDesk.exe --selftest
-          if ($LASTEXITCODE -ne 0) { throw "self-test failed" }
+          $p = Start-Process -FilePath .\release\ZweDesk.exe -ArgumentList '--selftest' -Wait -PassThru
+          Get-Content "$env:LOCALAPPDATA\ZweDesk\selftest.txt"
+          if ($p.ExitCode -ne 0) { throw "self-test failed (exit $($p.ExitCode))" }
 
       - name: Checksums
         shell: pwsh

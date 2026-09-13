@@ -24,9 +24,10 @@ jobs:
       - name: Self-test (every remote script must parse)
         shell: pwsh
         run: |
-          .\dist\ZweDesk.exe --selftest
-          if ($LASTEXITCODE -ne 0) { throw "self-test failed" }
+          # ZweDesk.exe is a GUI-subsystem executable: the shell does not wait for it unless asked to
+          $p = Start-Process -FilePath .\dist\ZweDesk.exe -ArgumentList '--selftest' -Wait -PassThru
           Get-Content "$env:LOCALAPPDATA\ZweDesk\selftest.txt"
+          if ($p.ExitCode -ne 0) { throw "self-test failed (exit $($p.ExitCode))" }
 
       - uses: actions/upload-artifact@v4
         with:
